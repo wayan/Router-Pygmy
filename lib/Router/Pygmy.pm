@@ -90,11 +90,15 @@ The C<$args> can be either positional, names single string or nothing (if path h
 
 =back
 
-=head1 Fixed parts and parameters precedence
+=head1 Simplicity 
 
-It should be noted that fixed parts has absolute precedence over parameters.
-If two routes shares the start and then one follows with fixed part 
-and the other with parameter, then the parameter can never have the value
+Route::Pygmy is very simple and thuse maybe of limited use. There are no
+parameter validations, no default param values, "the target" is always
+a string.
+
+Also it must be noted that fixed parts have an absolute precedence over parameters.
+If two routes shares the start and then one follows with a fixed part 
+and the other one with a parameter, then the parameter can never have the value
 of fixed part even if it leads to no match. It is also the intention.
 
 Having routes like this:
@@ -103,6 +107,13 @@ Having routes like this:
     $router->add_route( 'tree/search', 'tree.search' );
 
 the path C<tree/search/branches> doesnot match.
+
+At the other hand the mapping is fast. For the direct mapping path to (C<$name>, C<$args>)
+it is a simple DFA, the reverse mapping (C<$name>, C<$args>) is a simple hash lookup.
+
+=head1 DEPENDENCIES
+
+None so far.
 
 =cut
 
