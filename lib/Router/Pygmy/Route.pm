@@ -6,6 +6,7 @@ use warnings;
 # ABSTRACT: simple route object 
 
 use Carp;
+our @CARP_NOT = qw(Router::Pygmy);
 
 sub spec { shift()->{spec}; }
 
