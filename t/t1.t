@@ -7,21 +7,21 @@ use Test::Exception;
 use_ok('Router::Pygmy');
 
 sub new_router {
-    Router::Pygmy->new;
+    Router::Pygmy->new(@_);
 }
 
 {
     my $router = new_router;
-    $router->add_route( 'basic', 'x.name', 'T1' );
+    $router->add_route( 'basic', 'x.name' );
     throws_ok {
-        $router->add_route( 'basic/:id', 'x.name', 'T2' );
+        $router->add_route( 'basic/:id', 'x.name'  );
     }
     qr{^\QDuplicit routes for 'x.name' ('basic', 'basic/:id')},
       "No routes with same name";
 
-    $router->add_route( 'basic/:id', 'x.entity', 'T2' );
+    $router->add_route( 'basic/:id', 'x.entity' );
     throws_ok {
-        $router->add_route( 'basic/:z', 'x.entity', 'T2' );
+        $router->add_route( 'basic/:z', 'x.entity' );
     }
     qr{^\QDuplicit routes for 'x.entity' ('basic/:id', 'basic/:z')},
       "Duplicit routes";
@@ -116,7 +116,39 @@ qr{^\QInvalid arg count for route 'tree/:species/:branch', got 3 args, expected 
         $router->path_for( 'tree.root', [ 'ash', 12, 3 ] );
     } qr{^\QNo route 'tree.root'},
     'unknown route';
+}
 
+# constructor args
+{
+    my $router = new_router(
+        routes => {
+            'tree/:species/branches'    => 'tree.branches',
+            'tree/:species/:branch'     => 'tree.branch',
+            'tree/:species/:branch/nut' => 'tree.nut'
+        }
+    );
+
+    is_deeply(
+        [ $router->match('tree/oak/branches') ],
+        [ 'tree.branches', ['oak'] ],
+        'routes could be supplied as key => value too',
+    );
+}
+
+{
+    my $router = new_router({
+        routes => {
+            'tree/:species/branches'    => 'tree.branches',
+            'tree/:species/:branch'     => 'tree.branch',
+            'tree/:species/:branch/nut' => 'tree.nut'
+        }
+    });
+
+    is_deeply(
+        [ $router->match('tree/oak/branches') ],
+        [ 'tree.branches', ['oak'] ],
+        'routes could be supplied as \%args too',
+    );
 }
 
 done_testing();
