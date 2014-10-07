@@ -1,5 +1,9 @@
 Revision history for Router::Pygmy
 
+0.04 Tuesday, Oct. 07 2014
+
+- match_named returns [ key => value, ... ]
+
 0.03 Sunday, Sep. 28th 2014
 
 - routes can be supplied in constructor

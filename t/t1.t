@@ -36,7 +36,7 @@ sub new_router {
     );
     is_deeply(
         [ $router->match_named('tree/oak/branches') ],
-        [ 'tree.branches', {species=>'oak'} ],
+        [ 'tree.branches', [species=>'oak'] ],
     );
     is_deeply(
         [ $router->match('tree/oak/12') ],
@@ -44,7 +44,7 @@ sub new_router {
     );
     is_deeply(
         [ $router->match_named('tree/oak/12') ],
-        [ 'tree.branch', { species=> 'oak', branch => 12 } ],
+        [ 'tree.branch', [ species=> 'oak', branch => 12 ] ],
     );
     is_deeply( [ $router->match('tree/oak/12/ut') ], [], );
 
